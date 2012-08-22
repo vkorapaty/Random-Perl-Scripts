@@ -1,3 +1,6 @@
+source for md5sum script used:
+http://coding.debuntu.org/perl-calculate-md5-sum-file
+
 Downloaded the sountracks from the Humble Bundles that I own (2 and 4), and wanted a script that would check all of the files against their checksum. To get a list of the checksums, I basically copied and pasted the music download page of both bundles into a text file. Then used vim to format the soundtrack_md5s text file with the name of the game, the name of the soundtrack zip file, and the hash. There's probably was a better way to go about it, but this was straight-forward enough for me. 
 
 For the script, I first looked up how to create a md5 hash for a file with perl, found out about Digest::MD5. Ended up finding a script that basically did what I was looking for, that's where the md5sum function comes from. The md5 function is a bit odd though, using powershell or the windows command line, I get a certain hash for a given file. If I run the script in git bash, I get a different hash. For these files, the hash created with git bash was the same as that on the humble bundle site. Once I figured this out, I didn't look into the issue further. I'm using mysysgit 1.7.11, I think.
