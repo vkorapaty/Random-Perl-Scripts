@@ -27,9 +27,10 @@ find( sub {
 
 for my $key ( keys %file_count ) {
     if ( scalar(@{$file_count{$key}}) > 1 ) {
-        foreach ( @{$file_count{$key}} ) {
-            print "$_\n";
-        }
+        print $key."\n";
+        #foreach ( @{$file_count{$key}} ) {
+        #    print "$_\n";
+        #}
     }
 }
 
