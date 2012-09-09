@@ -1,4 +1,5 @@
-# Well, bother, here's a bunch of nice cheats: http://www.perlmonks.org/?node_id=136482
+# This helped more than anything, went through a whole lot of nonsense without much to show for it.
+# http://www.stonehenge.com/merlyn/LinuxMag/col45.html
 
 #!/usr/bin/perl
 use strict;
@@ -12,26 +13,17 @@ my $path = 'C:\Users\VK\Dropbox\Documents';
 my ($volume,$directories,$file) = File::Spec->splitpath( $path );
 my $dropbox_dir = File::Spec->catpath($volume,$directories,$file);
 
-find(\&process_file, $dropbox_dir);
-my $test_hash = weird_hash();
+my %file_count;
+find( sub {
+        if (-f $_) {
+            $file_count{$_}++;
+	}
+    }, $dropbox_dir);
 
-for my $key (keys %$test_hash) {
-    print "$key: $test_hash->{$key}}\n";
-}
 
-sub process_file {
-    if (-f $_) {
-	print "$_\n";
-	my $h = weird_hash();
-	$h->{$_}++;
+for my $key (keys %file_count) {
+    if ($file_count{$key} > 1) {
+        print "$key: $file_count{$key}\n";
     }
 }
 
-# Not sure how to save the items found in process_file, attempting to do so
-# using a closure. 
-# Using this example:
-# http://stackoverflow.com/questions/3045438/perl-closure-using-hash
-sub weird_hash {
-    my %h = {};
-    return \%h;
-}
