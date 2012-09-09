@@ -4,34 +4,34 @@
 use strict;
 use warnings;
 use File::Spec;
+use File::Find;
 use Data::Dumper;
 
-
-sub file_or_dir {
-    my ($base_dir, $questionable_path) = ( @_ );
-    my $full_path = File::Spec->catfile($base_dir, $questionable_path);
-    if (-f $full_path ) {
-        print "File: $questionable_path";
-	return "File";
-    }
-    else {
-        $full_path = File::Spec->catdir($base_dir, $questionable_path);
-        if (-d $full_path ) {
-            print "Directory: $questionable_path";
-	    return "Dir";
-        }
-    }
-}
 
 my $path = 'C:\Users\VK\Dropbox\Documents';
 my ($volume,$directories,$file) = File::Spec->splitpath( $path );
 my $dropbox_dir = File::Spec->catpath($volume,$directories,$file);
 
-opendir my $dh, $dropbox_dir or die "Cannot open $dropbox_dir: $!";
-my %tagged_items = map { $_ => file_or_dir($dropbox_dir, $_) } readdir $dh;
-closedir $dh;
+find(\&process_file, $dropbox_dir);
+my $test_hash = weird_hash();
 
-for my $keys (keys %tagged_items) {
-    print "$keys: $tagged_items{$keys}\n";
+for my $key (keys %$test_hash) {
+    print "$key: $test_hash->{$key}}\n";
 }
 
+sub process_file {
+    if (-f $_) {
+	print "$_\n";
+	my $h = weird_hash();
+	$h->{$_}++;
+    }
+}
+
+# Not sure how to save the items found in process_file, attempting to do so
+# using a closure. 
+# Using this example:
+# http://stackoverflow.com/questions/3045438/perl-closure-using-hash
+sub weird_hash {
+    my %h = {};
+    return \%h;
+}
