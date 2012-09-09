@@ -5,6 +5,23 @@ use File::Copy;
 use File::Spec;
 use Data::Dumper;
 
+
+sub file_or_dir {
+    my ($base_dir, $questionable_path) = ( @_ );
+    my $full_path = File::Spec->catfile($base_dir, $questionable_path);
+    if (-f $full_path ) {
+        print "File: $questionable_path";
+	return "File";
+    }
+    else {
+        $full_path = File::Spec->catdir($base_dir, $questionable_path);
+        if (-d $full_path ) {
+            print "Directory: $questionable_path";
+	    return "Dir";
+        }
+    }
+}
+
 #my $dropbox_dir = File::Spec->rel2abs("C:\Users\VK\Dropbox\Documents");
 #my $dropbox_dir = File::Spec->new("C:\Users\VK\Dropbox\Documents");
 my $path = 'C:\Users\VK\Dropbox\Documents';
