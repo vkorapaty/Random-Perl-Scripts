@@ -17,13 +17,16 @@ my %file_count;
 find( sub {
         if (-f $_) {
             $file_count{$_}++;
+	    if ($file_count{$_} > 1) {
+                print "$file_count{$_}: $File::Find::name\n";
+            }
 	}
     }, $dropbox_dir);
 
 
-for my $key (keys %file_count) {
-    if ($file_count{$key} > 1) {
-        print "$key: $file_count{$key}\n";
-    }
-}
+#for my $key (keys %file_count) {
+#    if ($file_count{$key} > 1) {
+#        print "$key: $file_count{$key}\n";
+#    }
+#}
 
