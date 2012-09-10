@@ -13,18 +13,18 @@ my $path = 'C:\Users\VK\Dropbox\Documents';
 my ($volume,$directories,$file) = File::Spec->splitpath( $path );
 my $dropbox_dir = File::Spec->catpath($volume,$directories,$file);
 
+# Using File::Find to find all of the files, and then store them into the 
+# %file_count hash. The hash is a hash of arrays, where the key is the file
+# found and the values linked to each key are the various paths where the
+# file is found.
 my %file_count;
 find( sub {
         if (-f $_) {
-	    push(@{$file_count{$_}}, $File::Find::name);
-	    #$file_count{$_}++;
-	    #if ($file_count{$_} > 1) {
-            #    print "$file_count{$_}: $File::Find::name\n";
-            #}
-	}
+            push(@{$file_count{$_}}, $File::Find::name);
+        }
     }, $dropbox_dir);
 
-
+# Going through the HoA to retrieve the directories for repeating files.
 my @files;
 for my $key ( keys %file_count ) {
     if ( scalar(@{$file_count{$key}}) > 1 ) {
@@ -34,5 +34,10 @@ for my $key ( keys %file_count ) {
     }
 }
 
-
-for (sort  @files) { print $_."\n"; }
+# All of the results have $base_path prepended to them. Interestingly, '' don't
+# work with \Q\E. Should look more into how quotemeta works.
+# The mapped regex will remove that, the results will be sorted, and then printed.
+# I think I may be going overboard with using map here.
+my $base_path = "C:\\Users\\VK\\Dropbox\\Documents\/";
+#map { print "$_\n"; } sort map { (my $s = $_ ) =~ s/\Q$base_path\E//; $s } @files;
+map { print "$_\n"; } map { (my $s = $_ ) =~ s/\Q$base_path\E//; $s } @files;
