@@ -1,4 +1,4 @@
-# This helped more than anything, went through a whole lot of nonsense without much to show for it.
+# This helped more than anything:
 # http://www.stonehenge.com/merlyn/LinuxMag/col45.html
 
 #!/usr/bin/perl
@@ -16,8 +16,8 @@ my $dropbox_dir = File::Spec->catpath($volume,$directories,$file);
 my %file_count;
 find( sub {
         if (-f $_) {
-	    #$file_count{$_}++;
 	    push(@{$file_count{$_}}, $File::Find::name);
+	    #$file_count{$_}++;
 	    #if ($file_count{$_} > 1) {
             #    print "$file_count{$_}: $File::Find::name\n";
             #}
@@ -25,12 +25,14 @@ find( sub {
     }, $dropbox_dir);
 
 
+my @files;
 for my $key ( keys %file_count ) {
     if ( scalar(@{$file_count{$key}}) > 1 ) {
-        print $key."\n";
-        #foreach ( @{$file_count{$key}} ) {
-        #    print "$_\n";
-        #}
+        for my $file_path ( @{$file_count{$key}} ) {
+            push (@files, $file_path);
+        }
     }
 }
 
+
+for (sort  @files) { print $_."\n"; }
