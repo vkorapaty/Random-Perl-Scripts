@@ -39,5 +39,9 @@ for my $key ( keys %file_count ) {
 # The mapped regex will remove that, the results will be sorted, and then printed.
 # I think I may be going overboard with using map here.
 my $base_path = "C:\\Users\\VK\\Dropbox\\Documents\/";
-#map { print "$_\n"; } sort map { (my $s = $_ ) =~ s/\Q$base_path\E//; $s } @files;
-map { print "$_\n"; } map { (my $s = $_ ) =~ s/\Q$base_path\E//; $s } @files;
+# Localizing $_ in map for regex is important. Otherwise, get only 1 or 0
+# success/fail output.
+map { print "$_\n"; } # Grouped by directory
+    sort map { (my $s = $_ ) =~ s/\Q$base_path\E//; $s } @files;
+#map { print "$_\n"; } # Grouped by file
+#    map { (my $s = $_ ) =~ s/\Q$base_path\E//; $s } @files;
